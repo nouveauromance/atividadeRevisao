@@ -1,4 +1,4 @@
-# Atividade de Revisão - 1° Bimeetre (abril/2025)
+# Atividade de Revisão - 1° Bimestre (abril/2025)
 
 🔎 Este repositório contém os enunciados e respostas da atividade de revisão.
 
