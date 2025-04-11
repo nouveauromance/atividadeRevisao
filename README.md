@@ -1,2 +1,11 @@
-# atividadeRevisao
-Atividade de revisão realizada para a disciplina de Técnicas de Programação II
+# Atividade de Revisão - 1° Bimeetre (abril/2025)
+
+🔎 Este repositório contém os enunciados e respostas da atividade de revisão.
+
+## Autores
+
+- [@Natali](https://github.com/nouveauromance)
+
+🔗 Aula por Vinícius Heltai Pacheco
+
+📍 Fatec Diadema Luigi Papaiz 
