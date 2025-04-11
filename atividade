@@ -1,0 +1,1708 @@
+ATIVIDADE 01 – PADRÃO DE PROJETO GOF - CRIACIONAL
+ 
+1 – INTRODUÇÃO A PADRÕES DE PROJETO: 
+
+QUESTÃO-1.1: O que é um padrão de projeto? Explique o conceito, objetivos e benefícios de se  utilizar padrões no desenvolvimento de software. 
+
+Padrão de projeto são modelos que auxiliam na elaboração de um projeto, seja no seu código, documentação, etc.  Tem como objetivo tornar sua elaboração mais fácil e organizada, e seus benefícios são a reutilização e aplicação para diversos projetos, além de melhorarem a documentação e manutenção do sistema, o que torna eles bem acessíveis. Eles ajudam a identificar equívocos e armadilhas e aumentam a produtividade, trazendo experiência para os desenvolvedores.
+
+QUESTÃO-1.2: Explique as quatro partes fundamentais que compõem um padrão de projeto segundo o Catálogo GoF. 
+
+Nome do padrão (descreve o problema e suas soluções), problema (como aplicar um padrão e incluir detalhes necessários), solução (estrutura do padrão e apresenta de forma genérica quando resolver o problema) e consequências (vantagens e desvantagens de aplicar um padrão no projeto).
+
+QUESTÃO-1.3: Por que padrões de projeto podem melhorar a manutenção e documentação de  sistemas orientados a objetos? 
+
+Os padrões de projeto tornam mais fácil a compreensão e elaboração de documentação, códigos, componentes, etc, e podem ser reutilizados, o que facilita muito para os desenvolvedores, aplicando seus conhecimentos prévios e experiências no seu desenvolvimento.
+
+QUESTÃO-1.4: Quais são os principais riscos ou críticas associados ao uso indiscriminado de  padrões de projeto? 
+
+	Os principais riscos e críticas estão associados à sistematização de abordagens amplamente utilizadas, unificação e implementação desses projetos sem adaptação, assim como traz dificuldade para os novatos, que podem tentar aplicá-los a todos os projetos, prezando pela simplicidade.
+
+2 – PADRÃO GOP – CRIACIONAL – FACTORY METHOD 
+
+QUESTÃO-2.1: Defina o padrão Factory Method, seu objetivo e quando é indicado utilizá-lo. 
+
+	O padrão Factory Method (método fábrica, construtor virtual), é um padrão criacional que fornece uma interface para criar objetos em uma superclasse, mas permite que essas subclasses alterem os tipos de objetos que serão criados. Seu objetivo é definir uma interface de criação de objeto, com permissão de instância para subclasses, e ele é indicado para ser utilizado quando uma classe não pode antecipar a classe dos objetos que deve criar, ou quando a classe deseja que suas subclasses especifiquem o objeto que será criado.
+
+QUESTÃO-2.2: Qual a diferença entre criar objetos diretamente com new e usar Factory Method?
+ 
+	Com o padrão Factory Method, os objetos são criados com o operador new, o que faz com que você possa sobrescrever o método fábrica em uma subclasse e alterar a classe de produtos que estão sendo criados pelo método.
+
+QUESTÃO-2.3: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Factory Method: Você está desenvolvendo uma aplicação de logística que deve  permitir entrega por caminhão, navio ou drone. Implemente uma solução usando o padrão Factory  Method, criando uma interface Transporte e subclasses concretas para cada modal. Crie uma classe Logística com método de fábrica. Utilize a linguagem de POO desejada.  
+
+// interface transporte
+class Transporte {
+    entregar() {
+        throw new Error("Método 'entregar()' deve ser implementado.");
+    }
+}
+
+// subclasses concretas
+class Caminhao extends Transporte {
+    entregar() {
+        console.log("Entrega feita por caminhão.");
+    }
+}
+
+class Navio extends Transporte {
+    entregar() {
+        console.log("Entrega feita por navio.");
+    }
+}
+
+class Drone extends Transporte {
+    entregar() {
+        console.log("Entrega feita por drone.");
+    }
+}
+
+// classe logística 
+class Logistica {
+    criarTransporte() {
+        throw new Error("Método 'criarTransporte()' deve ser sobrescrito.");
+    }
+
+    planejarEntrega() {
+        const transporte = this.criarTransporte();
+        transporte.entregar();
+    }
+}
+
+// subclasses de Logistica 
+class LogisticaRodoviaria extends Logistica {
+    criarTransporte() {
+        return new Caminhao();
+    }
+}
+
+class LogisticaMaritima extends Logistica {
+    criarTransporte() {
+        return new Navio();
+    }
+}
+
+class LogisticaAerea extends Logistica {
+    criarTransporte() {
+        return new Drone();
+    }
+}
+
+// teste
+const rodoviaria = new LogisticaRodoviaria();
+rodoviaria.planejarEntrega(); 
+
+const maritima = new LogisticaMaritima();
+maritima.planejarEntrega(); 
+
+const aerea = new LogisticaAerea();
+aerea.planejarEntrega();  
+
+
+QUESTÃO-2.4: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Factory Method: Um sistema educacional precisa permitir a criação de diferentes  tipos de provas (objetiva, dissertativa, prática). O aluno deve criar uma interface Prova, implementar  as variantes concretas e utilizar Factory Method para instanciar dinamicamente o tipo correto. 
+
+// interface prova
+class Prova {
+    realizar() {
+        throw new Error("O método 'realizar()' deve ser implementado.");
+    }
+}
+
+// provas concretas
+class ProvaObjetiva extends Prova {
+    realizar() {
+        console.log("Aplicando prova objetiva: múltipla escolha.");
+    }
+}
+
+class ProvaDissertativa extends Prova {
+    realizar() {
+        console.log("Aplicando prova dissertativa: redação.");
+    }
+}
+
+class ProvaPratica extends Prova {
+    realizar() {
+        console.log("Aplicando prova prática: atividade prática em laboratório.");
+    }
+}
+
+// criador base
+class SistemaEducacional {
+    criarProva() {
+        throw new Error("O método 'criarProva()' deve ser sobrescrito.");
+    }
+
+    aplicarProva() {
+        const prova = this.criarProva();
+        prova.realizar();
+    }
+}
+
+// criadores concretos
+class SistemaObjetivo extends SistemaEducacional {
+    criarProva() {
+        return new ProvaObjetiva( );
+    }
+}
+
+class SistemaDissertativo extends SistemaEducacional {
+    criarProva() {
+        return new ProvaDissertativa( );
+    }
+}
+
+class SistemaPratico extends SistemaEducacional {
+    criarProva() {
+        return new ProvaPratica();
+    }
+}
+
+// teste
+const prova1 = new SistemaObjetivo();
+prova1.aplicarProva();
+
+const prova2 = new SistemaDissertativo();
+prova2.aplicarProva(); 
+
+const prova3 = new SistemaPratico();
+prova3.aplicarProva(); 
+
+
+QUESTÃO-2.5: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Factory Method: Uma empresa de software cria interfaces de usuário para Windows,  Mac e Linux. Modele uma estrutura usando Factory Method para criar os elementos da interface de  forma independente da plataforma. 
+
+// interface base do botão
+class Botao {
+    render() {
+        throw new Error("O método 'render( )' deve ser implementado.");
+    }
+}
+
+// botões específicos para cada sistema operacional
+class BotaoWindows extends Botao {
+    render() {
+        console.log("Renderizando botão estilo Windows");
+    }
+}
+
+class BotaoMac extends Botao {
+    render() {
+        console.log("Renderizando botão estilo Mac");
+    }
+}
+
+class BotaoLinux extends Botao {
+    render() {
+        console.log("Renderizando botão estilo Linux");
+    }
+}
+
+// criador base: janela
+class Janela {
+    criarBotao() {
+        throw new Error("O método 'criarBotao()' deve ser sobrescrito.");
+    }
+
+    desenharJanela( ) {
+        const botao = this.criarBotao();
+        console.log("Desenhando a janela.");
+        botao.render();
+    }
+}
+
+// criadores concretos para cada sistema operacional
+class JanelaWindows extends Janela {
+    criarBotao() {
+        return new BotaoWindows();
+    }
+}
+
+class JanelaMac extends Janela {
+    criarBotao() {
+        return new BotaoMac();
+    }
+}
+
+class JanelaLinux extends Janela {
+    criarBotao() {
+        return new BotaoLinux();
+    }
+}
+
+// teste
+const appWin = new JanelaWindows();
+appWin.desenharJanela(); 
+
+const appMac = new JanelaMac();
+appMac.desenharJanela();
+
+const appLinux = new JanelaLinux();
+appLinux.desenharJanela(); 
+
+
+QUESTÃO-2.6: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Factory Method: Uma aplicação de agendamento de serviços permite agendar  consultas, reparos e entregas. O aluno deve implementar um Criador abstrato com um método  factory, e classes concretas para cada tipo de serviço.
+
+// interface base
+class Servico {
+    executar() {
+        throw new Error("O método 'executar()' deve ser implementado.");
+    }
+}
+
+// tipos de serviço
+class Consulta extends Servico {
+    executar() {
+        console.log("Agendando consulta médica.");
+    }
+}
+
+class Reparo extends Servico {
+    executar() {
+        console.log("Agendando reparo técnico.");
+    }
+}
+
+class Entrega extends Servico {
+    executar() {
+        console.log("Agendando entrega de produto.");
+    }
+}
+
+// criador abstrato
+class Agendamento {
+    criarServico() {
+        throw new Error("O método 'criarServico()' deve ser sobrescrito.");
+    }
+
+    agendar() {
+        const servico = this.criarServico();
+        servico.executar();
+    }
+}
+
+// criadores concretos
+class AgendamentoConsulta extends Agendamento {
+    criarServico() {
+        return new Consulta();
+    }
+}
+
+class AgendamentoReparo extends Agendamento {
+    criarServico ) {
+        return new Reparo();
+    }
+}
+
+class AgendamentoEntrega extends Agendamento {
+    criarServico() {
+        return new Entrega();
+    }
+}
+
+// teste
+const ag1 = new AgendamentoConsulta();
+ag1.agendar(); 
+const ag2 = new AgendamentoReparo();
+ag2.agendar(); 
+const ag3 = new AgendamentoEntrega();
+ag3.agendar(); 
+
+
+
+
+
+
+3 – PADRÃO GOP – CRIACIONAL – ABSTRACT FACTORY: 
+
+QUESTÃO-3.1: Explique o padrão Abstract Factory, destacando suas principais características e  diferenças em relação ao Factory Method. 
+
+	O padrão Abstract Factory  é uma forma de criar conjuntos de objetos que estão relacionados sem precisar dizer exatamente qual é a classe de cada um deles. O Factory Method cria uma interface que define um único tipo de objeto, mas permite que as subclasses decidam qual classe concreta será instanciada. Já o Abstract Factory vai além e define uma interface para criar famílias inteiras de objetos relacionados.
+
+QUESTÃO-3.2: Em que situações o uso de Abstract Factory é mais indicado? 
+
+	É útil quando o código precisa trabalhar com várias famílias de produtos relacionados, mas não quer depender de classes concretas desses produtos, permitindo futura escalabilidade. É recomendado implementar ele quando uma classe lida com múltiplos tipos de produtos, para manter a responsabilidade de cada classe bem definida.
+
+QUESTÃO-3.3: Como esse padrão promove a compatibilidade entre objetos de uma mesma família? 
+
+Fornece uma interface para a criação de objetos de cada classe, prevenindo a criação de uma variante errada de um produto que não coincide com produtos já criados pela aplicação.
+
+QUESTÃO-3.3: Quais os benefícios de separar a criação de famílias de objetos em fábricas distintas? 
+
+	Os benefícios são isolamento da lógica de criação, facilidade de substituição de famílias inteiras de objetos, garantia de compatibilidade de objetos, maior flexibilidade e escalabilidade.
+
+QUESTÃO-3.4: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Abstract Method: Um jogo permite criar personagens heróicos e malvados, cada um com armas e habilidades diferentes. Modele o sistema usando Abstract Factory para garantir que todos os elementos criados pertençam à mesma família temática. 
+
+// interfaces base
+class Personagem {
+    apresentar() { throw new Error("Implementar apresentar()"); }
+}
+class Arma {
+    usar() { throw new Error("Implementar usar()"); }
+}
+class Habilidade {
+    ativar() { throw new Error("Implementar ativar()"); }
+}
+
+// versões heroicas
+class GuerreiroHeroico extends Personagem {
+    apresentar() { console.log("Guerreiro da luz."); }
+}
+class EspadaHeroica extends Arma {
+    usar() { console.log("Golpeando com a espada sagrada."); }
+}
+class CuraHeroica extends Habilidade {
+    ativar() { console.log("Usando habilidade de cura divina."); }
+}
+
+// versões malvadas
+class GuerreiroMalvado extends Personagem {
+    apresentar() { console.log("Guerreiro das sombras."); }
+}
+class MachadoMalvado extends Arma {
+    usar() { console.log("Cortando com o machado sombrio."); }
+}
+class VenenoMalvado extends Habilidade {
+    ativar() { console.log("Liberando veneno traiçoeiro."); }
+}
+
+// fábrica abstrata
+class FabricaPersonagem {
+    criarPersonagem() { throw new Error("Implementar criarPersonagem"); }
+    criarArma() { throw new Error("Implementar criarArma"); }
+    criarHabilidade() { throw new Error("Implementar criarHabilidade"); }
+}
+
+// fábrica heroica
+class FabricaHeroica extends FabricaPersonagem {
+    criarPersonagem() { return new GuerreiroHeroico(); }
+    criarArma() { return new EspadaHeroica(); }
+    criarHabilidade() { return new CuraHeroica(); }
+}
+
+// fábrica malvada
+class FabricaMalvada extends FabricaPersonagem {
+    criarPersonagem() { return new GuerreiroMalvado(); }
+    criarArma() { return new MachadoMalvado(); }
+    criarHabilidade() { return new VenenoMalvado(); }
+}
+
+// cliente (jogo)
+class Jogo {
+    constructor(fabrica) {
+        this.personagem = fabrica.criarPersonagem();
+        this.arma = fabrica.criarArma();
+        this.habilidade = fabrica.criarHabilidade();
+    }
+
+    iniciar() {
+        this.personagem.apresentar();
+        this.arma.usar();
+        this.habilidade.ativar();
+    }
+}
+
+// teste
+console.log("Jogo Heroico:");
+const jogoHeroico = new Jogo(new FabricaHeroica());
+jogoHeroico.iniciar();
+
+console.log("Jogo Malvado:");
+const jogoMalvado = new Jogo(new FabricaMalvada());
+jogoMalvado.iniciar();
+
+QUESTÃO-3.5: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Abstract Method: Um e-commerce possui duas linhas de produtos: eletrônicos e  moda. Cada tipo possui fábricas diferentes. Modele a aplicação usando Abstract Factory, com  fábricas concretas e interfaces de produto. 
+
+// interfaces de produto
+class ProdutoEletronico {
+    exibir() {
+        throw new Error("exibir() deve ser implementado.");
+    }
+}
+
+class ProdutoModa {
+    exibir() {
+        throw new Error("exibir() deve ser implementado.");
+    }
+}
+
+// produtos eletrônicos
+class Smartphone extends ProdutoEletronico {
+    exibir() {
+        console.log("Produto Eletrônico: Smartphone.");
+    }
+}
+
+class Notebook extends ProdutoEletronico {
+    exibir() {
+        console.log("Produto Eletrônico: Notebook.");
+    }
+}
+
+// produtos de Moda
+class Camisa extends ProdutoModa {
+    exibir() {
+        console.log("Produto de Moda: Camisa.");
+    }
+}
+
+class Jaqueta extends ProdutoModa {
+    exibir() {
+        console.log("Produto de Moda: Jaqueta.");
+    }
+}
+
+// fábrica abstrata
+class FabricaProdutos {
+    criarProdutoEletronico() {
+        throw new Error("criarProdutoEletronico() precisa ser implementado.");
+    }
+    criarProdutoModa() {
+        throw new Error("criarProdutoModa() precisa ser implementado.");
+    }
+}
+
+// fábrica concreta: eletrônicos
+class FabricaEletronico extends FabricaProdutos {
+    criarProdutoEletronico() {
+        return new Smartphone();
+    }
+    criarProdutoModa() {
+        return new Camisa();
+    }
+}
+
+// fábrica concreta: moda
+class FabricaModa extends FabricaProdutos {
+    criarProdutoEletronico() {
+        return new Notebook();
+    }
+    criarProdutoModa() {
+        return new Jaqueta();
+    }
+}
+
+// cliente
+class LojaVirtual {
+    constructor(fabrica) {
+        this.produtoEletronico = fabrica.criarProdutoEletronico();
+        this.produtoModa = fabrica.criarProdutoModa();
+    }
+
+    mostrarVitrine() {
+        this.produtoEletronico.exibir();
+        this.produtoModa.exibir();
+    }
+}
+
+// teste
+console.log("Vitrine Eletrônica:");
+const loja1 = new LojaVirtual(new FabricaEletronico());
+loja1.mostrarVitrine();
+
+console.log("Vitrine de Moda:");
+const loja2 = new LojaVirtual(new FabricaModa());
+loja2.mostrarVitrine();
+
+QUESTÃO-3.6: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Abstract Method: Você está desenvolvendo uma ferramenta multiplataforma. Crie um  exemplo usando Abstract Factory para construir a interface de usuário (botões, menus, janelas) de  forma consistente para cada SO. 
+
+// interfaces dos componentes
+class Botao {
+    render() { throw new Error("render() deve ser implementado."); }
+}
+
+class Menu {
+    render() { throw new Error("render() deve ser implementado."); }
+}
+
+class Janela {
+    render() { throw new Error("render() deve ser implementado."); }
+}
+
+// componentes para windows
+class BotaoWindows extends Botao {
+    render() { console.log("🪟 Botão estilo Windows renderizado."); }
+}
+
+class MenuWindows extends Menu {
+    render() { console.log("🪟 Menu estilo Windows renderizado."); }
+}
+
+class JanelaWindows extends Janela {
+    render() { console.log("🪟 Janela estilo Windows renderizada."); }
+}
+
+// componentes para mac
+class BotaoMac extends Botao {
+    render() { console.log("Botão estilo Mac renderizado."); }
+}
+
+class MenuMac extends Menu {
+    render() { console.log("Menu estilo Mac renderizado."); }
+}
+
+class JanelaMac extends Janela {
+    render() { console.log("Janela estilo Mac renderizada."); }
+}
+
+// fábrica abstrata
+class UIFactory {
+    criarBotao() { throw new Error("criarBotao() deve ser implementado."); }
+    criarMenu() { throw new Error("criarMenu() deve ser implementado."); }
+    criarJanela() { throw new Error("criarJanela() deve ser implementado."); }
+}
+
+// fábrica Windows
+class FabricaWindows extends UIFactory {
+    criarBotao() { return new BotaoWindows(); }
+    criarMenu() { return new MenuWindows(); }
+    criarJanela() { return new JanelaWindows(); }
+}
+
+// fábrica Mac
+class FabricaMac extends UIFactory {
+    criarBotao() { return new BotaoMac(); }
+    criarMenu() { return new MenuMac(); }
+    criarJanela() { return new JanelaMac(); }
+}
+
+// cliente
+class Aplicativo {
+    constructor(factory) {
+        this.botao = factory.criarBotao();
+        this.menu = factory.criarMenu();
+        this.janela = factory.criarJanela();
+    }
+
+    renderizarInterface() {
+        console.log("Renderizando interface:");
+        this.botao.render();
+        this.menu.render();
+        this.janela.render();
+    }
+}
+
+// teste
+console.log("Interface Windows:");
+const appWin = new Aplicativo(new FabricaWindows());
+appWin.renderizarInterface();
+
+console.log("Interface Mac:");
+const appMac = new Aplicativo(new FabricaMac());
+appMac.renderizarInterface();
+
+QUESTÃO-3.7: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Abstract Method: Um sistema bancário internacional precisa adaptar-se para criar  componentes diferentes em cada país (menu, idioma, layout). Modele com Abstract Factory para  garantir coerência e manutenção. 
+
+// interfaces dos componentes
+class Menu {
+    render() { throw new Error("Implementar render()"); }
+}
+
+class Idioma {
+    traduzir(texto) { throw new Error("Implementar traduzir()"); }
+}
+
+class Layout {
+    aplicar() { throw new Error("Implementar aplicar()"); }
+}
+
+// componentes para brasil
+class MenuBrasil extends Menu {
+    render() { console.log("Menu em estilo brasileiro: Conta, Transferência, Pix"); }
+}
+
+class IdiomaBrasil extends Idioma {
+    traduzir(texto) {
+        console.log(`Traduzindo '${texto}' para português.`);
+    }
+}
+
+class LayoutBrasil extends Layout {
+    aplicar() { console.log("Layout responsivo com cores verde e amarela."); }
+}
+
+// componentes para japão
+class MenuJapao extends Menu {
+    render() { console.log("メニュー: アカウント, 送金, お知らせ"); }
+}
+
+class IdiomaJapao extends Idioma {
+    traduzir(texto) {
+        console.log(` 翻訳中 '${texto}' から日本語へ。`);
+    }
+}
+
+class LayoutJapao extends Layout {
+    aplicar() { console.log("Layout minimalista com cores sóbrias."); }
+}
+
+// fábrica abstrata
+class FabricaBancaria {
+    criarMenu() { throw new Error("Implementar criarMenu"); }
+    criarIdioma() { throw new Error("Implementar criarIdioma"); }
+    criarLayout() { throw new Error("Implementar criarLayout"); }
+}
+
+// fábrica brasil
+class FabricaBrasil extends FabricaBancaria {
+    criarMenu() { return new MenuBrasil(); }
+    criarIdioma() { return new IdiomaBrasil(); }
+    criarLayout() { return new LayoutBrasil(); }
+}
+
+// fábrica japão
+class FabricaJapao extends FabricaBancaria {
+    criarMenu() { return new MenuJapao(); }
+    criarIdioma() { return new IdiomaJapao(); }
+    criarLayout() { return new LayoutJapao(); }
+}
+
+// cliente
+class SistemaBancario {
+    constructor(fabrica) {
+        this.menu = fabrica.criarMenu();
+        this.idioma = fabrica.criarIdioma();
+        this.layout = fabrica.criarLayout();
+    }
+
+    iniciar() {
+        console.log("Inicializando sistema bancário internacional...");
+        this.menu.render();
+        this.idioma.traduzir("Bem-vindo");
+        this.layout.aplicar();
+    }
+}
+
+// teste
+console.log("Sistema do Brasil:");
+
+QUESTÃO-3.8: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Abstract Method: Um simulador de veículos precisa criar diferentes componentes  (motor, roda, freio) conforme o tipo de carro (esportivo ou popular). Modele com Abstract Factory com  classes fábrica especializadas. 
+
+// interfaces dos componentes
+class Motor {
+    ligar() { throw new Error("Implementar ligar()"); }
+}
+
+class Roda {
+    girar() { throw new Error("Implementar girar()"); }
+}
+
+class Freio {
+    frear() { throw new Error("Implementar frear()"); }
+}
+
+// componentes para carro esportivo
+class MotorEsportivo extends Motor {
+    ligar() { console.log("Motor esportivo ligado."); }
+}
+
+class RodaEsportiva extends Roda {
+    girar() { console.log("Rodas esportivas girando em alta velocidade."); }
+}
+
+class FreioEsportivo extends Freio {
+    frear() { console.log("Freios esportivos acionados com precisão."); }
+}
+
+// componentes para carro popular
+class MotorPopular extends Motor {
+    ligar() { console.log("Motor popular ligado."); }
+}
+
+class RodaPopular extends Roda {
+    girar() { console.log("Rodas populares girando suavemente."); }
+}
+
+class FreioPopular extends Freio {
+    frear() { console.log("Freios comuns acionados."); }
+}
+
+// fábrica abstrata
+class FabricaVeiculo {
+    criarMotor() { throw new Error("criarMotor() deve ser implementado."); }
+    criarRoda() { throw new Error("criarRoda() deve ser implementado."); }
+    criarFreio() { throw new Error("criarFreio() deve ser implementado."); }
+}
+
+// fábrica de carro esportivo
+class FabricaEsportivo extends FabricaVeiculo {
+    criarMotor() { return new MotorEsportivo(); }
+    criarRoda() { return new RodaEsportiva(); }
+    criarFreio() { return new FreioEsportivo(); }
+}
+
+// fábrica de carro popular
+class FabricaPopular extends FabricaVeiculo {
+    criarMotor() { return new MotorPopular(); }
+    criarRoda() { return new RodaPopular(); }
+    criarFreio() { return new FreioPopular(); }
+}
+
+// cliente
+class SimuladorVeiculo {
+    constructor(fabrica) {
+        this.motor = fabrica.criarMotor();
+        this.roda = fabrica.criarRoda();
+        this.freio = fabrica.criarFreio();
+    }
+
+    simular() {
+        console.log("Iniciando simulação do veículo.");
+        this.motor.ligar();
+        this.roda.girar();
+        this.freio.frear();
+    }
+}
+
+// teste
+console.log("Simulador de carro popular:");
+const popular = new SimuladorVeiculo(new FabricaPopular());
+popular.simular();
+
+console.log("Simulador de carro esportivo:");
+const esportivo = new SimuladorVeiculo(new FabricaEsportivo());
+esportivo.simular();
+
+4 - PADRÃO GOP – CRIACIONAL – BUILDER 
+
+QUESTÃO-4.1: O que é o padrão Builder? Em que cenários ele é mais indicado? 
+
+O padrão Builder é utilizado para construir objetos passo a passo, simplificando a criação de objetos complexos que requerem muitos parâmetros, indicado em cenários onde o sistema cria objetos complexos.  
+
+QUESTÃO-4.2: Quais são os principais elementos do padrão Builder e seus papéis? 
+
+	Interface (declara etapas de construção do produto), builders concretos (provém diferentes implementações das etapas de construção. Produzem elementos que não seguem a interface comum), elementos (são objetos resultantes, construídos por diferentes builders e não precisam necessariamente pertencer a mesma interface), classe (define a ordem na qual as etapas são chamadas) e por fim o método (associa um dos objetos com a classe).
+
+QUESTÃO-4.3: Diferencie o Builder de um construtor comum. 
+
+Dentro de um construtor só é possível passar todos os elementos de uma vez, no Builder é possível passar todos os elementos de uma vez só.
+
+QUESTÃO-4.4: Como o Builder facilita a criação de objetos imutáveis e complexos?
+
+	Ele oferece a simplificação do código de inicialização, possibilitando a reutilização de códigos e criação de objetos complexos com mais facilidade. Além disso, facilita a modificação de atributos de um objeto, modificando no builder correspondente sem afetar o código do cliente ou os outros builders.
+
+QUESTÃO-4.5: Dê um exemplo de aplicação do padrão Builder em um sistema real. 
+
+	Ele pode ser aplicado em um sistema de formulários, onde um formulário pode ter muitos campos e opções, mas o usuário pode precisar definir apenas alguns deles. O padrão Builder pode ser usado para elaborar os objetos do formulário com diferentes combinações de campos e opções.
+
+QUESTÃO-4.6: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Builder: Um sistema de pizzaria permite que o cliente monte sua própria pizza com diferentes ingredientes. Modele a solução usando Builder, separando cada etapa da montagem em  métodos do builder. 
+
+// pizza
+class Pizza {
+    constructor() {
+        this.massa = "";
+        this.molho = "";
+        this.queijo = "";
+        this.toppings = [];
+    }
+
+    exibir() {
+        console.log("Sua pizza está pronta:");
+        console.log(`Massa: ${this.massa}`);
+        console.log(`Molho: ${this.molho}`);
+        console.log(`Queijo: ${this.queijo}`);
+        console.log(`Ingredientes: ${this.toppings.join(", ")}`);
+    }
+}
+
+// builder
+class PizzaBuilder {
+    constructor() {
+        this.pizza = new Pizza();
+    }
+
+    escolherMassa(tipo) {
+        this.pizza.massa = tipo;
+        return this;
+    }
+
+    adicionarMolho(tipo) {
+        this.pizza.molho = tipo;
+        return this;
+    }
+
+    adicionarQueijo(tipo) {
+        this.pizza.queijo = tipo;
+        return this;
+    }
+
+    adicionarIngrediente(ingrediente) {
+        this.pizza.toppings.push(ingrediente);
+        return this;
+    }
+
+    montar() {
+        return this.pizza;
+    }
+}
+
+// receitas padrão
+class Cozinha {
+    static prepararPizzaCalabresa() {
+        return new PizzaBuilder()
+            .escolherMassa("Tradicional")
+            .adicionarMolho("Tomate")
+            .adicionarQueijo("Mussarela")
+            .adicionarIngrediente("Calabresa")
+            .adicionarIngrediente("Cebola")
+            .montar();
+    }
+
+    static prepararPizzaVegana() {
+        return new PizzaBuilder()
+            .escolherMassa("Integral")
+            .adicionarMolho("Tomate")
+            .adicionarQueijo("Queijo vegetal")
+            .adicionarIngrediente("Brócolis")
+            .adicionarIngrediente("Pimentão")
+            .montar();
+    }
+}
+
+// teste
+
+console.log("Pizza personalizada:");
+const minhaPizza = new PizzaBuilder()
+    .escolherMassa("Pan")
+    .adicionarMolho("Barbecue")
+    .adicionarQueijo("Cheddar")
+    .adicionarIngrediente("Frango")
+    .adicionarIngrediente("Bacon")
+    .montar();
+minhaPizza.exibir();
+
+console.log("Pizza Calabresa:");
+const calabresa = Cozinha.prepararPizzaCalabresa();
+calabresa.exibir();
+
+console.log("Pizza Vegana:");
+const vegana = Cozinha.prepararPizzaVegana();
+vegana.exibir();
+
+QUESTÃO-4.7: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Builder: Um sistema de relatórios permite montar documentos com capa, sumário,  conteúdo e gráficos. Modele a construção desses relatórios passo a passo usando um Diretor e  Builder. 
+
+// produto final
+class Relatorio {
+    constructor() {
+        this.capa = "";
+        this.sumario = "";
+        this.conteudo = "";
+        this.graficos = "";
+    }
+
+    exibir() {
+        console.log("Relatório Montado:");
+        console.log(`Capa: ${this.capa}`);
+        console.log(`Sumário: ${this.sumario}`);
+        console.log(`Conteúdo: ${this.conteudo}`);
+        console.log(`Gráficos: ${this.graficos}`);
+    }
+}
+
+// builder
+class RelatorioBuilder {
+    constructor() {
+        this.relatorio = new Relatorio();
+    }
+
+    adicionarCapa(titulo) {
+        this.relatorio.capa = titulo;
+        return this;
+    }
+
+    adicionarSumario(itens) {
+        this.relatorio.sumario = itens.join(", ");
+        return this;
+    }
+
+    adicionarConteudo(texto) {
+        this.relatorio.conteudo = texto;
+        return this;
+    }
+
+    adicionarGraficos(descricao) {
+        this.relatorio.graficos = descricao;
+        return this;
+    }
+
+    construir() {
+        return this.relatorio;
+    }
+}
+
+// relatórios padrão
+class DiretorRelatorio {
+    constructor(builder) {
+        this.builder = builder;
+    }
+
+    construirRelatorioFinanceiro() {
+        return this.builder
+            .adicionarCapa("Relatório Financeiro 2025")
+            .adicionarSumario(["Receita", "Despesas", "Lucro"])
+            .adicionarConteudo("Este relatório apresenta os dados financeiros do ano.")
+            .adicionarGraficos("Gráfico de barras e pizza com comparativos trimestrais.")
+            .construir();
+    }
+
+    construirRelatorioProjetos() {
+        return this.builder
+            .adicionarCapa("Relatório de Projetos em Andamento")
+            .adicionarSumario(["Projetos", "Equipes", "Cronograma"])
+            .adicionarConteudo("Análise detalhada dos projetos ativos.")
+            .adicionarGraficos("Gantt, barra de progresso e KPIs visuais.")
+            .construir();
+    }
+}
+
+// teste
+
+// relatório feito com diretor
+const builder1 = new RelatorioBuilder();
+const diretor = new DiretorRelatorio(builder1);
+const relatorioFinanceiro = diretor.construirRelatorioFinanceiro();
+relatorioFinanceiro.exibir();
+
+console.log("\n");
+
+// relatório personalizado, feito manualmente
+const builder2 = new RelatorioBuilder();
+const relatorioCustom = builder2
+    .adicionarCapa("Relatório de Pesquisa de Mercado")
+    .adicionarSumario(["Introdução", "Metodologia", "Resultados"])
+    .adicionarConteudo("O estudo de mercado revelou tendências de consumo relevantes.")
+    .adicionarGraficos("Gráficos de linha e nuvem de palavras.")
+    .construir();
+
+relatorioCustom.exibir();
+
+QUESTÃO-4.8: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Builder: Em uma aplicação de educação, o aluno monta sua grade horária semanal  com disciplinas, horários e salas. Use Builder para permitir uma construção flexível e personalizável  da grade. 
+
+// GradeHoraria
+class GradeHoraria {
+    constructor() {
+        this.disciplinas = [];
+    }
+
+    exibir() {
+        console.log("Grade Horária Semanal:");
+        this.disciplinas.forEach((disciplina, index) => {
+            console.log(
+                `${index + 1}. ${disciplina.nome} — ${disciplina.horario} — Sala ${disciplina.sala}`
+            );
+        });
+    }
+}
+
+// builder
+class GradeBuilder {
+    constructor() {
+        this.grade = new GradeHoraria();
+    }
+
+    adicionarDisciplina(nome, horario, sala) {
+        this.grade.disciplinas.push({
+            nome,
+            horario,
+            sala,
+        });
+        return this;
+    }
+
+    construir() {
+        return this.grade;
+    }
+}
+
+// teste
+
+const minhaGrade = new GradeBuilder()
+    .adicionarDisciplina("Matemática", "Segunda 08h–10h", "101")
+    .adicionarDisciplina("Português", "Terça 10h–12h", "102")
+    .adicionarDisciplina("Programação", "Quarta 14h–16h", "Lab 01")
+    .adicionarDisciplina("História", "Sexta 09h–11h", "103")
+    .construir();
+
+minhaGrade.exibir();
+
+QUESTÃO-4.9: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Builder: Um sistema de cadastro de estudantes permite definir nome, curso,  endereço, e-mail, celular, responsáveis. Implemente o Builder para esse caso, permitindo  preenchimento opcional dos dados. 
+
+// estudante
+class Estudante {
+    constructor(builder) {
+        this.nome = builder.nome;
+        this.curso = builder.curso;
+        this.endereco = builder.endereco;
+        this.email = builder.email;
+        this.celular = builder.celular;
+        this.responsaveis = builder.responsaveis;
+    }
+
+    exibir() {
+        console.log("Estudante Cadastrado:");
+        console.log(`Nome: ${this.nome}`);
+        console.log(`Curso: ${this.curso || "Não informado"}`);
+        console.log(`Endereço: ${this.endereco || "Não informado"}`);
+        console.log(`Email: ${this.email || "Não informado"}`);
+        console.log(`Celular: ${this.celular || "Não informado"}`);
+        console.log(`Responsáveis: ${this.responsaveis?.join(", ") || "Não informado"}`);
+    }
+}
+
+// builder
+class EstudanteBuilder {
+    constructor(nome) {
+        if (!nome) throw new Error("O nome é obrigatório!");
+        this.nome = nome;
+    }
+
+    setCurso(curso) {
+        this.curso = curso;
+        return this;
+    }
+
+    setEndereco(endereco) {
+        this.endereco = endereco;
+        return this;
+    }
+
+    setEmail(email) {
+        this.email = email;
+        return this;
+    }
+
+    setCelular(celular) {
+        this.celular = celular;
+        return this;
+    }
+
+    setResponsaveis(lista) {
+        this.responsaveis = lista;
+        return this;
+    }
+
+    construir() {
+        return new Estudante(this);
+    }
+}
+
+// teste
+const estudanteCompleto = new EstudanteBuilder("Natali")
+    .setCurso("DSM")
+    .setEndereco("Rua Tiradentes, 1837")
+    .setEmail("natalidau@gmail.com")
+    .setCelular("11 91234-5678")
+    .setResponsaveis(["Lafayete", "Katia"])
+    .construir();
+
+estudanteCompleto.exibir();
+
+console.log("\n");
+
+const estudanteSimples = new EstudanteBuilder("Katia")
+    .setCurso("Pedagogia")
+    .construir();
+
+estudanteSimples.exibir();
+
+QUESTÃO-4.10: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Builder: Um menu de aplicativo permite adicionar título, ícones, atalhos e submenu.  Modele a estrutura usando Builder, permitindo composição fluente. 
+
+// menu
+class MenuApp {
+    constructor() {
+        this.titulo = "";
+        this.icones = [];
+        this.atalhos = [];
+        this.submenus = [];
+    }
+
+    exibir(indent = 0) {
+        const prefix = " ".repeat(indent);
+        console.log(`${prefix} Menu: ${this.titulo}`);
+        if (this.icones.length) console.log(`${prefix} Ícones: ${this.icones.join(", ")}`);
+        if (this.atalhos.length) console.log(`${prefix} Atalhos: ${this.atalhos.join(", ")}`);
+        if (this.submenus.length) {
+            console.log(`${prefix} Submenus:`);
+            this.submenus.forEach(sub => sub.exibir(indent + 4));
+        }
+    }
+}
+
+// builder
+class MenuBuilder {
+    constructor() {
+        this.menu = new MenuApp();
+    }
+
+    setTitulo(titulo) {
+        this.menu.titulo = titulo;
+        return this;
+    }
+
+    adicionarIcone(icone) {
+        this.menu.icones.push(icone);
+        return this;
+    }
+
+    adicionarAtalho(atalho) {
+        this.menu.atalhos.push(atalho);
+        return this;
+    }
+
+    adicionarSubmenu(submenuBuilder) {
+        const submenu = submenuBuilder.construir();
+        this.menu.submenus.push(submenu);
+        return this;
+    }
+
+    construir() {
+        return this.menu;
+    }
+}
+
+// teste
+
+const menuAjuda = new MenuBuilder()
+    .setTitulo("Ajuda")
+    .adicionarIcone("❓")
+    .adicionarAtalho("F1");
+
+menuPrincipal.exibir();
+
+5 – PADRÃO GOP – CRIACIONAL – PROTOTYPE 
+
+QUESTÃO-5.1: Defina o padrão Prototype e seu propósito no desenvolvimento de software.
+
+	O padrão de design Prototype ajuda a criar cópias de objetos sem precisar mudar o código de suas classes originais . Ele permite que crie novos objetos a partir de modelos existentes de maneira fácil e rápida. Seu propósito é utilizar métodos de clonagem para copiar o objeto e modificar apenas o que for necessário, sem criar algo do zero.
+
+ QUESTÃO-5.2: Quando é indicado usar o padrão Prototype? 
+
+	O padrão Prototype é indicado para ser utilizado quando precisa criar muitas cópias de objetos que possuem uma estrutura complexa e que seria difícil de instanciar manualmente, além de também ser útil quando você deseja criar novos objetos com pequenas variações a partir de um modelo existente.
+
+QUESTÃO-5.3: Como o Prototype contribui para a eficiência na criação de objetos? 
+
+	Ele contribui permitindo que você crie novos objetos a partir de modelos existentes sem precisar mudar o código original desses modelos, assim criando uma classe “protótipo” que possui um método para clonar objetos, assim sendo necessário apenas utilizar o método de clonagem para copiar o objeto e modificar apenas o que for necessário no novo objeto.
+
+QUESTÃO-5.4: Explique como implementar Prototype em uma linguagem orientada a objetos. 
+
+	Cria-se uma classe que representa um objeto que se pretende clonar, outra que é responsável por gerenciar as instâncias da classe clonável. Ao adicionar um novo objeto, cria-se uma nova instância da primeira classe e armazena-se no dicionário de objeto, usando o id como chave. Ao solicitar o id, chama-se o método clone() de instância, que faz uma cópia superficial do objeto e retorna uma nova instância idêntica à original.
+
+QUESTÃO-5.5: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Prototype: Uma editora digital utiliza documentos como contratos, cartas e relatórios.  Modele o sistema com Prototype, criando uma classe Documento com método clone(), e classes  derivadas. 
+
+// classe base 
+class Documento {
+    constructor(titulo, conteudo) {
+        this.titulo = titulo;
+        this.conteudo = conteudo;
+    }
+
+    clone() {
+        return new this.constructor(this.titulo, this.conteudo);
+    }
+
+    exibir() {
+        console.log(`Tipo: ${this.constructor.name}`);
+        console.log(`Título: ${this.titulo}`);
+        console.log(`Conteúdo: ${this.conteudo}`);
+        console.log("---");
+    }
+}
+
+// subclasses concretas
+class Contrato extends Documento {}
+class Carta extends Documento {}
+class Relatorio extends Documento {}
+
+// testes
+const contratoOriginal = new Contrato("Contrato de Prestação de Serviços", "Este contrato estabelece os termos...");
+
+contratoOriginal.exibir();
+
+QUESTÃO-5.6: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Prototype:Uma pizzaria utiliza protótipos de pizzas para clonagem rápida dos pedidos.  Modele com Prototype e permita alterações no clone (ex: ingredientes extras).
+
+// classe base
+class Pizza {
+    constructor(nome, ingredientes = [], borda = "normal") {
+        this.nome = nome;
+        this.ingredientes = ingredientes;
+        this.borda = borda;
+    }
+
+    clone() {
+        return new Pizza(
+            this.nome,
+            [...this.ingredientes],
+            this.borda
+        );
+    }
+
+    exibir() {
+        console.log(`Pizza: ${this.nome}`);
+        console.log(`   Ingredientes: ${this.ingredientes.join(", ")}`);
+        console.log(`   Borda: ${this.borda}`);
+        console.log("---");
+    }
+}
+
+// testes
+const pizzaCalabresa = new Pizza("Calabresa", ["calabresa", "cebola", "mussarela"]);
+const pizzaFrango = new Pizza("Frango com Catupiry", ["frango", "catupiry", "orégano"]);
+const pizzaMarguerita = new Pizza("Marguerita", ["tomate", "manjericão", "mussarela"]);
+
+const pedido1 = pizzaCalabresa.clone();
+pedido1.ingredientes.push("azeitona");
+pedido1.borda = "recheada de cheddar";
+
+const pedido2 = pizzaFrango.clone();
+pedido2.ingredientes = pedido2.ingredientes.filter(i => i !== "catupiry");
+pedido2.ingredientes.push("creme de milho");
+
+const pedido3 = pizzaMarguerita.clone(); 
+
+console.log(“Pedido original (protótipos):");
+pizzaCalabresa.exibir();
+pizzaFranco = pizzaFrango.exibir();
+pizzaMarguerita.exibir();
+
+console.log("Pedidos clonados:");
+pedido1.exibir(); // Calabresa + azeitona + borda recheada
+pedido2.exibir(); // Frango sem catupiry + creme de milho
+pedido3.exibir(); // Marguerita padrão
+
+QUESTÃO-5.7: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Prototype:Um sistema CAD permite clonar formas gráficas com pequenas alterações.  Modele com Prototype e implemente formas como classes concretas que implementam o método  clone(). 
+
+// classe base
+class Forma {
+    constructor(x, y, cor) {
+        this.x = x;
+        this.y = y;
+        this.cor = cor;
+    }
+
+    clone() {
+        return new this.constructor(this.x, this.y, this.cor);
+    }
+
+    desenhar() {
+        console.log(`Forma: ${this.constructor.name}`);
+        console.log(`Posição: (${this.x}, ${this.y})`);
+        console.log(`Cor: ${this.cor}`);
+    }
+}
+
+// formas concretas
+class Circulo extends Forma {
+    constructor(x, y, cor, raio) {
+        super(x, y, cor);
+        this.raio = raio;
+    }
+
+    clone() {
+        const clone = new Circulo(this.x, this.y, this.cor, this.raio);
+        return clone;
+    }
+
+    desenhar() {
+        super.desenhar();
+        console.log(`   Raio: ${this.raio}`);
+        console.log("---");
+    }
+}
+
+class Retangulo extends Forma {
+    constructor(x, y, cor, largura, altura) {
+        super(x, y, cor);
+        this.largura = largura;
+        this.altura = altura;
+    }
+
+    clone() {
+        return new Retangulo(this.x, this.y, this.cor, this.largura, this.altura);
+    }
+
+    desenhar() {
+        super.desenhar();
+        console.log(`   Largura: ${this.largura}, Altura: ${this.altura}`);
+        console.log("---");
+    }
+}
+
+// testes
+const circuloOriginal = new Circulo(10, 20, "vermelho", 15);
+const retanguloOriginal = new Retangulo(30, 40, "azul", 50, 20);
+
+const circuloClone = circuloOriginal.clone();
+circuloClone.x += 10;
+circuloClone.cor = "laranja";
+
+const retanguloClone = retanguloOriginal.clone();
+retanguloClone.altura = 40;
+retanguloClone.y += 5;
+
+console.log("Formas originais:");
+circuloOriginal.desenhar();
+retanguloOriginal.desenhar();
+
+console.log("Clones modificados:");
+circuloClone.desenhar();
+retanguloClone.desenhar();
+
+QUESTÃO-5.8: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Prototype: Uma aplicação de RH precisa clonar perfis de cargos com pequenas  variações de requisitos. Modele usando Prototype com base em modelos de cargo. 
+
+// classe cargo
+class Cargo {
+    constructor(titulo, salario, requisitos = []) {
+        this.titulo = titulo;
+        this.salario = salario;
+        this.requisitos = requisitos;
+    }
+
+    clone() {
+            return new Cargo(
+            this.titulo,
+            this.salario,
+            [...this.requisitos]
+        );
+    }
+
+    exibir() {
+        console.log(`Cargo: ${this.titulo}`);
+        console.log(`Salário: R$ ${this.salario.toFixed(2)}`);
+        console.log(`Requisitos: ${this.requisitos.join(", ")}`);
+        console.log("---");
+    }
+}
+
+// testes
+const devJunior = new Cargo("Desenvolvedor Júnior", 3000, [
+    "JavaScript básico",
+    "HTML e CSS",
+    "Git"
+]);
+
+const devSenior = new Cargo("Desenvolvedor Sênior", 8000, [
+    "JavaScript avançado",
+    "Node.js",
+    "Arquitetura de software",
+    "Liderança de equipe"
+]);
+
+const devJuniorMobile = devJunior.clone();
+devJuniorMobile.titulo = "Dev Júnior - Mobile";
+devJuniorMobile.requisitos.push("React Native");
+
+const devSeniorFullstack = devSenior.clone();
+devSeniorFullstack.titulo = "Dev Sênior Fullstack";
+devSeniorFullstack.requisitos.push("React", "MongoDB");
+
+console.log("Cargos Originais:");
+devJunior.exibir();
+devSenior.exibir();
+
+console.log("Cargos Clonados e Personalizados:");
+devJuniorMobile.exibir();
+devSeniorFullstack.exibir();
+
+QUESTÃO-5.9: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Prototype: Um sistema de agendamento de aulas usa modelos de horários que são  clonados e ajustados. Modele com Prototype criando uma classe Horário com suporte a clonagem. 
+
+// classe base
+class Horario {
+    constructor(disciplina, professor, dia, hora, sala) {
+        this.disciplina = disciplina;
+        this.professor = professor;
+        this.dia = dia;
+        this.hora = hora;
+        this.sala = sala;
+    }
+
+    clone() {
+        return new Horario(
+            this.disciplina,
+            this.professor,
+            this.dia,
+            this.hora,
+            this.sala
+        );
+    }
+
+    exibir() {
+        console.log(`${this.disciplina} — Prof. ${this.professor}`);
+        console.log(`Dia: ${this.dia}, Hora: ${this.hora}, Sala: ${this.sala}`);
+        console.log("---");
+    }
+}
+
+// testes
+const modeloMatematica = new Horario(
+    "Matemática",
+    "Natali",
+    "Segunda-feira",
+    "08:00",
+    "Sala 101"
+);
+
+const turmaB = modeloMatematica.clone();
+turmaB.dia = "Terça-feira";
+turmaB.sala = "Sala 102";
+
+const turmaC = modeloMatematica.clone();
+turmaC.hora = "10:00";
+turmaC.professor = "Bruno";
+turmaC.sala = "Sala 201";
+
+console.log("Modelo base:");
+modeloMatematica.exibir();
+
+console.log("Horários clonados:");
+turmaB.exibir();
+turmaC.exibir();
+
+6 – PADRÃO GOP – CRIACIONAL – SINGLETON 
+
+QUESTÃO-6.1: O que é o padrão Singleton e qual sua finalidade? 
+
+O padrão Singleton garante que apenas uma instância de classe seja criada e acessada de forma global, o que garante que sempre será trabalhada a mesma instância, independente de quantas vezes ela seja instanciada.
+
+QUESTÃO-6.2: Quais problemas esse padrão pode causar em sistemas grandes? 
+
+	O padrão singleton pode causar dificuldade de manter e testar conforme o crescimento do sistema.
+
+QUESTÃO-6.3: Quando é apropriado usar Singleton? 
+
+Quando for necessário acessar recursos compartilhados com o banco de dados ou extensão com internet, ou quando for necessário controlar o acesso a um objeto de forma centralizada, assim como quando houver apenas uma instância de classe, e para economizar recursos de memória e processamento, além de evitar conflito entre instâncias.
+
+QUESTÃO-6.4: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Singleton: Implemente um gerenciador de configurações de sistema que garanta  apenas uma instância acessível globalmente. Use uma classe com método estático getInstance(). 
+
+class ConfiguracoesSistema {
+    constructor() {
+        if (ConfiguracoesSistema.instancia) {
+            return ConfiguracoesSistema.instancia;
+        }
+
+        this.configs = {};
+        ConfiguracoesSistema.instancia = this;
+    }
+
+    static getInstance() {
+        if (!ConfiguracoesSistema.instancia) {
+            ConfiguracoesSistema.instancia = new ConfiguracoesSistema();
+        }
+        return ConfiguracoesSistema.instancia;
+    }
+
+    setConfig(chave, valor) {
+        this.configs[chave] = valor;
+    }
+
+    getConfig(chave) {
+        return this.configs[chave];
+    }
+
+    exibirConfigs() {
+        console.log("Configurações Atuais:", this.configs);
+    }
+}
+
+// testes
+const sistema1 = ConfiguracoesSistema.getInstance();
+sistema1.setConfig("modoEscuro", true);
+sistema1.setConfig("idioma", "pt-BR");
+
+const sistema2 = ConfiguracoesSistema.getInstance();
+sistema2.setConfig("notificacoes", false);
+
+console.log("Mesma instância?", sistema1 === sistema2); // true
+
+sistema1.exibirConfigs();
+
+QUESTÃO-6.5: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Singleton:Um sistema de log deve garantir que todas as partes da aplicação escrevam  no mesmo arquivo de log. Modele com Singleton usando um método estático para acesso global ao  logger. 
+
+class Logger {
+    constructor() {
+        if (Logger.instancia) {
+            return Logger.instancia;
+        }
+
+        this.logs = [];
+        Logger.instancia = this;
+    }
+
+    static getInstance() {
+        if (!Logger.instancia) {
+            Logger.instancia = new Logger();
+        }
+        return Logger.instancia;
+    }
+
+    log(mensagem) {
+        const timestamp = new Date().toISOString();
+        this.logs.push(`[${timestamp}] ${mensagem}`);
+    }
+
+    exibirLogs() {
+        console.log("LOG DO SISTEMA:");
+        this.logs.forEach(log => console.log(log));
+    }
+}
+
+// teste
+const logger1 = Logger.getInstance();
+logger1.log("Sistema iniciado");
+logger1.log("Usuário autenticado");
+
+const logger2 = Logger.getInstance();
+logger2.log("Requisição ao servidor enviada");
+logger2.log("Resposta recebida com sucesso");
+
+console.log("Mesma instância?", logger1 === logger2); // true
+
+logger1.exibirLogs();
+
+QUESTÃO-6.6: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Singleton: Uma aplicação de vendas online deve garantir um único carrinho de  compras por usuário. Modele com Singleton garantindo consistência nas operações do carrinho. 
+
+class CarrinhoCompras {
+    constructor() {
+        if (CarrinhoCompras.instancia) {
+            return CarrinhoCompras.instancia;
+        }
+
+        this.itens = [];
+        CarrinhoCompras.instancia = this;
+    }
+
+    static getInstance() {
+        if (!CarrinhoCompras.instancia) {
+            CarrinhoCompras.instancia = new CarrinhoCompras();
+        }
+        return CarrinhoCompras.instancia;
+    }
+
+    adicionarItem(nome, preco) {
+        this.itens.push({ nome, preco });
+        console.log(`Item adicionado: ${nome} (R$ ${preco.toFixed(2)})`);
+    }
+
+    removerItem(nome) {
+        this.itens = this.itens.filter(item => item.nome !== nome);
+        console.log(`Item removido: ${nome}`);
+    }
+
+    listarItens() {
+        console.log("Itens no carrinho:");
+        this.itens.forEach(item => {
+            console.log(`- ${item.nome}: R$ ${item.preco.toFixed(2)}`);
+        });
+    }
+
+    totalizar() {
+        const total = this.itens.reduce((acc, item) => acc + item.preco, 0);
+        console.log(`Total: R$ ${total.toFixed(2)}`);
+        return total;
+    }
+}
+
+// teste
+const carrinho1 = CarrinhoCompras.getInstance();
+carrinho1.adicionarItem("Fone Bluetooth", 199.90);
+carrinho1.adicionarItem("Mouse Gamer", 149.90);
+
+const carrinho2 = CarrinhoCompras.getInstance();
+carrinho2.adicionarItem("Camiseta Oversized", 89.90);
+carrinho2.removerItem("Mouse Gamer");
+
+console.log("Mesmo carrinho?", carrinho1 === carrinho2); // true
+
+carrinho1.listarItens();
+carrinho1.totalizar();
+
+QUESTÃO-6.7: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Singleton: Um cache de dados compartilhado por diversos módulos precisa ser  centralizado. Modele com Singleton para manter o cache acessível de forma segura. 
+
+class CacheDados {
+    constructor() {
+        if (CacheDados.instancia) {
+            return CacheDados.instancia;
+        }
+
+        this.cache = {};
+        CacheDados.instancia = this;
+    }
+
+    static getInstance() {
+        if (!CacheDados.instancia) {
+            CacheDados.instancia = new CacheDados();
+        }
+        return CacheDados.instancia;
+    }
+
+    set(chave, valor) {
+        this.cache[chave] = valor;
+        console.log(`Cache atualizado: ${chave} → ${valor}`);
+    }
+
+    get(chave) {
+        return this.cache[chave] ?? null;
+    }
+
+    exibir() {
+        console.log("Conteúdo do Cache:");
+        console.log(this.cache);
+    }
+}
+
+// teste
+const cacheA = CacheDados.getInstance();
+cacheA.set("usuario", "Natali");
+cacheA.set("tema", "escuro");
+
+const cacheB = CacheDados.getInstance();
+cacheB.set("token", "abc123");
+
+const cacheC = CacheDados.getInstance();
+console.log("Usuário atual:", cacheC.get("usuario"));
+console.log("Tema atual:", cacheC.get("tema"));
+console.log("Token:", cacheC.get("token"));
+
+console.log("Mesma instância?", cacheA === cacheB && cacheB === cacheC); // true
+
+cacheC.exibir();
+
+QUESTÃO-6.8: Utilizando sua linguagem de POO desejada (recomenda-se JavaScript), resolva com o Padrão GoF - Singleton:Um sistema de licenças de software deve manter apenas uma instância do  verificador de licença. Modele com Singleton assegurando controle único de validação.
+
+class ValidadorLicenca {
+    constructor() {
+        if (ValidadorLicenca.instancia) {
+            return ValidadorLicenca.instancia;
+        }
+
+        this.status = "Nenhuma licença verificada ainda.";
+        ValidadorLicenca.instancia = this;
+    }
+
+    static getInstance() {
+        if (!ValidadorLicenca.instancia) {
+            ValidadorLicenca.instancia = new ValidadorLicenca();
+        }
+        return ValidadorLicenca.instancia;
+    }
+
+    validar(licenca) {
+        if (licenca === "LICENCA-VALIDA-1234") {
+            this.status = "Licença válida.";
+        } else {
+            this.status = "Licença inválida.";
+        }
+    }
+
+    exibirStatus() {
+        console.log("Status da Licença:", this.status);
+    }
+}
+
+// teste
+const verificador1 = ValidadorLicenca.getInstance();
+verificador1.validar("LICENCA-INVALIDA-0000");
+verificador1.exibirStatus();
+
+const verificador2 = ValidadorLicenca.getInstance();
+verificador2.validar("LICENCA-VALIDA-1234");
+verificador2.exibirStatus();
+
+console.log("Mesma instância?", verificador1 === verificador2);
